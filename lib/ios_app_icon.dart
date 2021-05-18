@@ -100,11 +100,11 @@ void createLauncherIcons(String imagePath) {
 
   if (file1x.existsSync()) {
     final name = '$filename@1x$ext';
-    file1x.copySync('$iosDefaultLaunchImageFolder/$name');
+    file1x.copySync('$iosDefaultLaunchImageFolder$name');
     images.add(ContentsImageObject(
       idiom: 'universal',
       filename: name,
-      scale: 3,
+      scale: 1,
     ));
   } else {
     print('The launch image file not found');
@@ -113,11 +113,11 @@ void createLauncherIcons(String imagePath) {
 
   if (file2x.existsSync()) {
     final name = '$filename@2x$ext';
-    file2x.copySync('$iosDefaultLaunchImageFolder/$name');
+    file2x.copySync('$iosDefaultLaunchImageFolder$name');
     images.add(ContentsImageObject(
       idiom: 'universal',
       filename: name,
-      scale: 3,
+      scale: 2,
     ));
   } else {
     print('Warn: there are no 2.0x format for $imagePath');
@@ -125,7 +125,7 @@ void createLauncherIcons(String imagePath) {
 
   if (file3x.existsSync()) {
     final name = '$filename@3x$ext';
-    file3x.copySync('$iosDefaultLaunchImageFolder/$name');
+    file3x.copySync('$iosDefaultLaunchImageFolder$name');
     images.add(ContentsImageObject(
       idiom: 'universal',
       filename: name,
@@ -145,7 +145,8 @@ void modifyContentsFile(String path, List<ContentsImageObject> images) {
     'images': images.map((e) => e.toJson()).toList(),
     'info': ContentsInfoObject(version: 1, author: 'xcode').toJson()
   };
-  final contentsFileContent = json.encode(contentJson);
+  final encoder =  JsonEncoder.withIndent('  ');
+  final contentsFileContent = encoder.convert(contentJson);
   file.writeAsString(contentsFileContent);
 }
 
