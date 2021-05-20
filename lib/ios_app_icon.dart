@@ -62,6 +62,11 @@ void createIcons(Options options) {
   }
   print('Size of the image is ${image.width}x${image.height}.');
   print('Overwriting default iOS launcher icon with the new icon.');
+  final destinationDir = Directory(iosDefaultIconFolder);
+  if (destinationDir.existsSync()) {
+    destinationDir.deleteSync(recursive: true);
+  }
+  destinationDir.createSync();
   for (final template in iosIcons) {
     saveNewIcons(template, image);
   }
@@ -93,11 +98,16 @@ void createLauncherIcons(String imagePath) {
   final ext = p.extension(imagePath);
   final basename = p.basename(imagePath);
   final dirname = p.dirname(imagePath);
+  final destinationDir = Directory(iosDefaultLaunchImageFolder);
   final file1x = File(imagePath);
   final file2x = File('$dirname/2.0x/$basename');
   final file3x = File('$dirname/3.0x/$basename');
   final images = <ContentsImageObject>[];
 
+  if (destinationDir.existsSync()) {
+    destinationDir.deleteSync(recursive: true);
+  }
+  destinationDir.createSync();
   if (file1x.existsSync()) {
     final name = '$filename@1x$ext';
     file1x.copySync('$iosDefaultLaunchImageFolder$name');
