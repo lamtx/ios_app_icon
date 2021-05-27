@@ -1,11 +1,12 @@
-import 'contents_image_object.dart';
-import 'ios_icon_template.dart';
+import 'model/contents_image_object.dart';
+import 'model/ios_icon_template.dart';
 
 const iosRunnerFolder = 'ios/Runner/';
 const iosAssetFolder = '${iosRunnerFolder}Assets.xcassets/';
 const iosDefaultIconFolder = '${iosAssetFolder}AppIcon.appiconset/';
 const iosDefaultLaunchImageFolder = '${iosAssetFolder}LaunchImage.imageset/';
 const iosDefaultIconName = 'Icon-App';
+const iosFlutterFolder = 'ios/Flutter/';
 const iosIcons = <IosIconTemplate>[
   IosIconTemplate(name: '-20x20@1x', size: 20),
   IosIconTemplate(name: '-20x20@2x', size: 40),
@@ -140,3 +141,5 @@ const List<ContentsImageObject> iosImagesList = [
     scale: 1,
   ),
 ];
+
+String androidResFolderOf(String flavor) => 'android/app/src/$flavor/res/';
