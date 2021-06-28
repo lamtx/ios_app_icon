@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:ios_app_icon/src/generator/generate_strings.dart';
 import 'package:ios_app_icon/src/generator/google_service_copier.dart';
-import 'package:ios_app_icon/src/generator/launcher_icon_generator.dart';
+import 'package:ios_app_icon/src/generator/launcher_icon_copier.dart';
 import 'package:ios_app_icon/src/model/options.dart';
 import 'package:yaml/yaml.dart';
 
@@ -26,7 +26,7 @@ void main(List<String> arguments) {
   }
   final options = Options.fromJson(iconPath);
   createIcons(options);
-  createLauncherIcons(options);
+  copyLauncherIcons(flavor, options);
   copyGoogleServiceInfo(options);
   generateStrings(flavor, options);
 }

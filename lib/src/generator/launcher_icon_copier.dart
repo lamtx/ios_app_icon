@@ -7,7 +7,7 @@ import '../define.dart';
 import '../model/contents_image_object.dart';
 import 'utilities.dart';
 
-void createLauncherIcons(Options options) {
+void copyLauncherIcons(String flavor, Options options) {
   final imagePath = options.launchImage;
   if (imagePath == null || imagePath.isEmpty) {
     return;
@@ -30,6 +30,7 @@ void createLauncherIcons(Options options) {
   if (file1x.existsSync()) {
     final name = '$filename@1x$ext';
     file1x.copySync('$iosDefaultLaunchImageFolder$name');
+    file1x.copy('${_prepareFolder(androidDrawableFolderOf(flavor, 1))}/$basename');
     images.add(ContentsImageObject(
       idiom: 'universal',
       filename: name,
@@ -43,6 +44,7 @@ void createLauncherIcons(Options options) {
   if (file2x.existsSync()) {
     final name = '$filename@2x$ext';
     file2x.copySync('$iosDefaultLaunchImageFolder$name');
+    file2x.copy('${_prepareFolder(androidDrawableFolderOf(flavor, 2))}/$basename');
     images.add(ContentsImageObject(
       idiom: 'universal',
       filename: name,
@@ -55,6 +57,7 @@ void createLauncherIcons(Options options) {
   if (file3x.existsSync()) {
     final name = '$filename@3x$ext';
     file3x.copySync('$iosDefaultLaunchImageFolder$name');
+    file3x.copy('${_prepareFolder(androidDrawableFolderOf(flavor, 3))}/$basename');
     images.add(ContentsImageObject(
       idiom: 'universal',
       filename: name,
@@ -65,4 +68,12 @@ void createLauncherIcons(Options options) {
   }
 
   modifyContentsFile('${iosDefaultLaunchImageFolder}Contents.json', images);
+}
+
+String _prepareFolder(String path) {
+  final dir = Directory(path);
+  if (!dir.existsSync()) {
+    dir.createSync(recursive: true);
+  }
+  return path;
 }
