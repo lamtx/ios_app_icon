@@ -14,10 +14,9 @@ void main(List<String> arguments) {
     return;
   }
   final flavor = arguments.first;
-  final config = _loadConfig();
-  final iosAppConfig = config['ios_app_icon'];
-  if (iosAppConfig is! Map) {
-    print('ios_app_icon not found in pubspec.yaml');
+  final iosAppConfig = _loadConfig();
+  if (iosAppConfig == null) {
+    print('flavor.yaml does not exists');
     return;
   }
   final iconPath = iosAppConfig[flavor];
@@ -31,8 +30,12 @@ void main(List<String> arguments) {
   generateStrings(flavor, options);
 }
 
-Map _loadConfig([String configFile = 'pubspec.yaml']) {
+Map? _loadConfig([String configFile = 'flavor.yaml']) {
   final file = File(configFile);
-  final yamlString = file.readAsStringSync();
-  return loadYaml(yamlString);
+  if (file.existsSync()) {
+    final yamlString = file.readAsStringSync();
+    return loadYaml(yamlString);
+  } else {
+    return null;
+  }
 }
