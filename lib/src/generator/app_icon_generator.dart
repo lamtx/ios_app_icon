@@ -20,6 +20,9 @@ void createIcons(Options options) {
     print('Set "background_color: 0xffffff" to set the background.');
     return;
   }
+  if (options.contentColor != null) {
+    image = _applyContentColor(image, options.contentColor!);
+  }
   if (options.backgroundColor != null) {
     image = _applyBackground(image, options.backgroundColor!);
   }
@@ -65,4 +68,10 @@ Image _applyBackground(Image image, int color) {
     fill(Image(image.width, image.height, channels: Channels.rgb), color),
     image,
   )..channels = Channels.rgb;
+}
+
+Image _applyContentColor(Image image, int color) {
+  print('Set the content color to 0x${color.toRadixString(16)}');
+  image.fillRgb(color);
+  return image;
 }
