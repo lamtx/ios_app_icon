@@ -1,12 +1,15 @@
 import 'dart:io';
 
-import 'package:ios_app_icon/src/generator/generate_strings.dart';
-import 'package:ios_app_icon/src/generator/google_service_copier.dart';
-import 'package:ios_app_icon/src/generator/launcher_icon_copier.dart';
-import 'package:ios_app_icon/src/model/options.dart';
+import 'package:net/net.dart';
 import 'package:yaml/yaml.dart';
 
-import 'src/generator/app_icon_generator.dart';
+import 'src/generator/generate_strings.dart';
+import 'src/generator/google_service_copier.dart';
+import 'src/model/options.dart';
+import 'src/use_cases/app_icon/ios/generate_ios_app_icons_use_case.dart';
+import 'src/use_cases/app_icon/macos/generate_macos_app_icons_use_case.dart';
+import 'src/use_cases/create_icon_set_use_case.dart';
+import 'src/use_cases/generate_launcher_icons_use_case.dart';
 
 void main(List<String> arguments) {
   if (arguments.length != 1) {
@@ -14,27 +17,37 @@ void main(List<String> arguments) {
     return;
   }
   final flavor = arguments.first;
-  final iosAppConfig = _loadConfig();
-  if (iosAppConfig == null) {
+  final flavors = _loadConfig();
+  if (flavors == null) {
     print('flavor.yaml does not exists');
     return;
   }
-  final iconPath = iosAppConfig[flavor];
-  if (iconPath == null) {
-    print('image path does not found for flavor "$flavor"');
+  final options = flavors[flavor];
+  if (options == null) {
+    print('flavor.yaml does not contain `$flavor`');
+    return;
   }
-  final options = Options.fromJson(iconPath);
-  createIcons(options);
-  copyLauncherIcons(flavor, options);
+  const createIconSetUseCase = CreateIconSetUseCase();
+  const GenerateIosAppIconsUseCase(createIconSetUseCase).createIcons(options);
+  const GenerateMacosAppIconsUseCase(createIconSetUseCase).createIcons(options);
+  const GenerateLauncherIconsUseCase(createIconSetUseCase)
+      .copyLauncherIcons(flavor, options);
+
   copyGoogleServiceInfo(options);
   generateStrings(flavor, options);
 }
 
-Map? _loadConfig([String configFile = 'flavor.yaml']) {
+Map<String, Options>? _loadConfig([String configFile = 'flavor.yaml']) {
   final file = File(configFile);
   if (file.existsSync()) {
     final yamlString = file.readAsStringSync();
-    return loadYaml(yamlString);
+    final obj = loadYaml(yamlString) as Map<dynamic, dynamic>;
+    return obj.map(
+      (dynamic key, dynamic value) => MapEntry(
+        key as String,
+        Options.parser.parseJson(value as Map),
+      ),
+    );
   } else {
     return null;
   }

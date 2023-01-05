@@ -4,19 +4,18 @@ import '../define.dart';
 import '../model/options.dart';
 
 void generateStrings(String flavor, Options options) {
-  final res = options.strings;
-  if (res is Map) {
-    _generateStringIOS(res);
+  if (options.strings.isNotEmpty) {
+    _generateStringIOS(options.strings);
   }
 }
 
-void _generateStringIOS(Map res) {
+void _generateStringIOS(Map<String, Object?> res) {
   print('Generate IOS Flavor.xconfig');
   final file = File('${iosFlutterFolder}Flavor.xcconfig');
   final source = StringBuffer();
-  for (var value in res.entries) {
+  for (final value in res.entries) {
     if (value.value != null) {
-      source.write('${value.key.toString().toUpperCase()}=${value.value}\n');
+      source.write('${value.key.toUpperCase()}=${value.value}\n');
     }
   }
   file.writeAsString(source.toString(), flush: true);
