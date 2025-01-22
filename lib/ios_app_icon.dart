@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:net/net.dart';
 import 'package:yaml/yaml.dart';
 
 import 'src/generator/generate_strings.dart';
@@ -45,7 +44,7 @@ Map<String, Options>? _loadConfig([String configFile = 'flavor.yaml']) {
     return obj.map(
       (dynamic key, dynamic value) => MapEntry(
         key as String,
-        Options.parser.parseJson(value as Map),
+        Options.fromJson(value as Map<String, Object?>),
       ),
     );
   } else {

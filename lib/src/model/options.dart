@@ -1,7 +1,13 @@
 import 'package:image/image.dart';
-import 'package:net/net.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class Options {
+part 'options.g.dart';
+
+@JsonSerializable(
+  createToJson: false,
+  fieldRename: FieldRename.snake,
+)
+final class Options {
   const Options({
     required this.image,
     required this.macosImage,
@@ -12,6 +18,9 @@ class Options {
     required this.googleServiceInfo,
     required this.strings,
   });
+
+  factory Options.fromJson(Map<String, Object?> json) =>
+      _$OptionsFromJson(json);
 
   /// AppIcon for iOS and Android, required.
   final String image;
@@ -25,9 +34,11 @@ class Options {
 
   /// If [image] contains alpha channel, it will be removed by
   /// [backgroundColor], iOS only.
+  @JsonKey(fromJson: _readColor)
   final Color? backgroundColor;
 
   /// Apply tint for [image] by [contentColor]
+  @JsonKey(fromJson: _readColor)
   final Color? contentColor;
 
   /// Launch Icon (Splash screen)
@@ -38,33 +49,19 @@ class Options {
 
   /// Generate strings resources
   final Map<String, Object?> strings;
-
-  static final DataParser<Options> parser = (reader) => Options(
-        image: reader.readString("image"),
-        macosImage: reader.readString("macos_image"),
-        macosImageTargetSize: reader.readNullableInt("macos_image_target_size"),
-        backgroundColor: reader.readColor("background_color"),
-        contentColor: reader.readColor("content_color"),
-        launchImage: reader.readString("launch_image"),
-        googleServiceInfo: reader.readString("google_service_info"),
-        strings: reader.readMap("strings"),
-      );
 }
 
-extension on JsonReader {
-  Color? readColor(String name) {
-    final value = readNullableInt(name);
-    if (value == null) {
-      return null;
-    }
-    final a = (0xff000000 & value) >> 24;
-    final r = (0x00ff0000 & value) >> 16;
-    final g = (0x0000ff00 & value) >> 8;
-    final b = (0x000000ff & value) >> 0;
-    if (a == 0xff) {
-      return ColorUint8.rgb(r, g, b);
-    } else {
-      return ColorUint8.rgba(r, g, b, a);
-    }
+Color? _readColor(int? value) {
+  if (value == null) {
+    return null;
+  }
+  final a = (0xff000000 & value) >> 24;
+  final r = (0x00ff0000 & value) >> 16;
+  final g = (0x0000ff00 & value) >> 8;
+  final b = (0x000000ff & value) >> 0;
+  if (a == 0xff) {
+    return ColorUint8.rgb(r, g, b);
+  } else {
+    return ColorUint8.rgba(r, g, b, a);
   }
 }

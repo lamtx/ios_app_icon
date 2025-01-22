@@ -1,6 +1,6 @@
-import 'package:net/net.dart';
+import 'package:ext/ext.dart';
 
-class ContentsInfo implements JsonObject {
+class ContentsInfo implements ToJson {
   const ContentsInfo({
     required this.version,
     required this.author,
@@ -10,7 +10,7 @@ class ContentsInfo implements JsonObject {
   final String author;
 
   @override
-  Map<String, Object?> describeContent() => {
+  Map<String, Object?> toJson() => {
         'version': version,
         'author': author,
       };

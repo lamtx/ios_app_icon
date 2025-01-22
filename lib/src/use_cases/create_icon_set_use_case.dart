@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:image/image.dart';
-import 'package:net/net.dart';
 import 'package:path/path.dart';
 
 import '../model/contents_info.dart';
