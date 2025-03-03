@@ -40,7 +40,7 @@ Map<String, Options>? _loadConfig([String configFile = 'flavor.yaml']) {
   final file = File(configFile);
   if (file.existsSync()) {
     final yamlString = file.readAsStringSync();
-    final obj = loadYaml(yamlString) as Map<dynamic, dynamic>;
+    final obj = loadYaml(yamlString) as YamlMap;
     return obj.map(
       (dynamic key, dynamic value) => MapEntry(
         key as String,
