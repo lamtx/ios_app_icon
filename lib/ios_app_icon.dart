@@ -44,7 +44,7 @@ Map<String, Options>? _loadConfig([String configFile = 'flavor.yaml']) {
     return obj.map(
       (dynamic key, dynamic value) => MapEntry(
         key as String,
-        Options.fromJson(value as Map<String, Object?>),
+        Options.fromJson((value as YamlMap)),
       ),
     );
   } else {

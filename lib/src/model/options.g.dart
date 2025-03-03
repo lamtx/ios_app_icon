@@ -6,7 +6,7 @@ part of 'options.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Options _$OptionsFromJson(Map<String, dynamic> json) => Options(
+Options _$OptionsFromJson(Map<dynamic, dynamic> json) => Options(
       image: json['image'] as String,
       macosImage: json['macos_image'] as String,
       macosImageTargetSize: (json['macos_image_target_size'] as num?)?.toInt(),

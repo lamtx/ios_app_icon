@@ -19,7 +19,7 @@ final class Options {
     required this.strings,
   });
 
-  factory Options.fromJson(Map<String, Object?> json) =>
+  factory Options.fromJson(Map<dynamic, dynamic> json) =>
       _$OptionsFromJson(json);
 
   /// AppIcon for iOS and Android, required.
