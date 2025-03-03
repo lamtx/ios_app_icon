@@ -26,6 +26,7 @@ final class Options {
   final String image;
 
   /// AppIcon for macOS. Optional, if it is not defined, [image] will be used.
+  @JsonKey(defaultValue: "")
   final String macosImage;
 
   /// Add padding for [macosImage] to [macosImageTargetSize].
@@ -42,12 +43,15 @@ final class Options {
   final Color? contentColor;
 
   /// Launch Icon (Splash screen)
+  @JsonKey(defaultValue: "")
   final String launchImage;
 
   /// Copy GoogleService-Info.plist to the corresponding folder, iOS only.
+  @JsonKey(defaultValue: "")
   final String googleServiceInfo;
 
   /// Generate strings resources
+  @JsonKey(defaultValue:  {})
   final Map<String, Object?> strings;
 }
 
