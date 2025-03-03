@@ -4,6 +4,7 @@ import 'package:yaml/yaml.dart';
 
 import 'src/generator/generate_strings.dart';
 import 'src/generator/google_service_copier.dart';
+import 'src/misc/unbox_yaml_map.dart';
 import 'src/model/options.dart';
 import 'src/use_cases/app_icon/ios/generate_ios_app_icons_use_case.dart';
 import 'src/use_cases/app_icon/macos/generate_macos_app_icons_use_case.dart';
@@ -44,7 +45,7 @@ Map<String, Options>? _loadConfig([String configFile = 'flavor.yaml']) {
     return obj.map(
       (dynamic key, dynamic value) => MapEntry(
         key as String,
-        Options.fromJson((value as YamlMap)),
+        Options.fromJson(UnboxYamlMap(value as YamlMap)),
       ),
     );
   } else {
